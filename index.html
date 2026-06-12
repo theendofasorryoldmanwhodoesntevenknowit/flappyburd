@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Flappy Bird Enhanced - HTML5</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="description" content="Enhanced Flappy Bird with levels, enemies, and upgrades.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Flappy Bird Enhanced</h1>
+        <div class="header-controls">
+            <button id="fullscreenBtn" title="Toggle Fullscreen">🖥️ Fullscreen</button>
+            <button id="muteBtn" title="Mute/Unmute">🔊 Sound</button>
+            <button id="helpBtn" title="Help">❓ Help</button>
+        </div>
+    </div>
+
+    <div class="supercenter" id="gameContainer">
+        <div id="gamescreen">
+            <div id="sky" class="animated">
+                <div id="flyarea">
+                    <div id="ceiling" class="animated"></div>
+                    
+                    <div id="hud">
+                        <div class="hud-item">
+                            <span>Level:</span>
+                            <span id="levelDisplay">1</span>
+                        </div>
+                        <div class="hud-item">
+                            <span>Score:</span>
+                            <span id="scoreDisplay">0</span>
+                        </div>
+                        <div class="hud-item">
+                            <span>Health:</span>
+                            <span id="healthDisplay">❤️❤️❤️</span>
+                        </div>
+                        <div class="hud-item">
+                            <span>Upgrades:</span>
+                            <div id="upgradesDisplay"></div>
+                        </div>
+                    </div>
+
+                    <div id="player" class="bird animated"></div>
+                    <div id="bigscore"></div>
+                    <div id="splash"></div>
+
+                    <div id="scoreboard" style="display: none;">
+                        <div class="scoreboard-content">
+                            <h2>Game Over!</h2>
+                            <div class="score-info">
+                                <p>Final Score: <span id="finalScore">0</span></p>
+                                <p>Level Reached: <span id="finalLevel">1</span></p>
+                                <p>High Score: <span id="highScoreDisplay">0</span></p>
+                            </div>
+                            <button id="replayBtn" class="btn-primary">Play Again</button>
+                        </div>
+                    </div>
+
+                    <div id="levelSelect" style="display: none;">
+                        <div class="level-select-content">
+                            <h2>Select Level</h2>
+                            <div class="level-buttons">
+                                <button class="level-btn" data-level="1">
+                                    <span class="level-num">1</span>
+                                    <span class="level-name">Easy</span>
+                                    <span class="level-desc">Classic gameplay</span>
+                                </button>
+                                <button class="level-btn" data-level="2">
+                                    <span class="level-num">2</span>
+                                    <span class="level-name">Medium</span>
+                                    <span class="level-desc">Faster speed</span>
+                                </button>
+                                <button class="level-btn" data-level="3">
+                                    <span class="level-num">3</span>
+                                    <span class="level-name">Hard</span>
+                                    <span class="level-desc">Deadly enemies</span>
+                                </button>
+                                <button class="level-btn" data-level="4">
+                                    <span class="level-num">4</span>
+                                    <span class="level-name">Insane</span>
+                                    <span class="level-desc">Maximum chaos</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="upgradeShop" style="display: none;">
+                        <div class="upgrade-shop-content">
+                            <h2>Upgrade Shop</h2>
+                            <p>Current Points: <span id="shopPoints">0</span></p>
+                            <div class="upgrades-grid">
+                                <div class="upgrade-card" data-upgrade="shield">
+                                    <h3>Shield</h3>
+                                    <p>Absorbs 1 hit</p>
+                                    <p class="cost">Cost: 50 pts</p>
+                                    <button class="upgrade-buy-btn" data-upgrade="shield">Buy</button>
+                                </div>
+                                <div class="upgrade-card" data-upgrade="speedBoost">
+                                    <h3>Speed Boost</h3>
+                                    <p>Fly faster for 5 sec</p>
+                                    <p class="cost">Cost: 75 pts</p>
+                                    <button class="upgrade-buy-btn" data-upgrade="speedBoost">Buy</button>
+                                </div>
+                                <div class="upgrade-card" data-upgrade="slowMotion">
+                                    <h3>Slow Motion</h3>
+                                    <p>Slow down obstacles</p>
+                                    <p class="cost">Cost: 100 pts</p>
+                                    <button class="upgrade-buy-btn" data-upgrade="slowMotion">Buy</button>
+                                </div>
+                            </div>
+                            <button id="closeShopBtn" class="btn-secondary">Back to Game</button>
+                        </div>
+                    </div>
+
+                    <div id="pipes-container"></div>
+                    <div id="enemies-container"></div>
+                    <div id="powerups-container"></div>
+                </div>
+            </div>
+
+            <div id="land" class="animated">
+                <div id="debug"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="helpModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>How to Play</h2>
+            <div class="help-content">
+                <h3>Controls</h3>
+                <p><strong>Click</strong> or <strong>Space</strong> to make the bird fly</p>
+                
+                <h3>Levels</h3>
+                <p>🟢 Easy - Classic gameplay with basic pipes</p>
+                <p>🟡 Medium - Faster obstacles and tighter gaps</p>
+                <p>🔴 Hard - Moving lasers and complex enemies</p>
+                <p>⚫ Insane - Everything at maximum speed and difficulty</p>
+                
+                <h3>Enemies</h3>
+                <p>🟫 Pipes - Avoid the gaps</p>
+                <p>⚡ Lasers - Moving energy beams</p>
+                <p>🟪 Spheres - Bouncing obstacles</p>
+                
+                <h3>Upgrades</h3>
+                <p>🛡️ Shield - Blocks one hit</p>
+                <p>⚡ Speed Boost - Fly faster temporarily</p>
+                <p>🐢 Slow Motion - Slow down obstacles</p>
+                
+                <h3>Tips</h3>
+                <p>• Collect power-ups for bonus points</p>
+                <p>• Each level has unique enemy patterns</p>
+                <p>• Use upgrades strategically</p>
+                <p>• Press F11 or use Fullscreen button for immersive gameplay</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <a id="githubLink" href="#" target="_blank">Source Code</a> |
+        <a id="startBtn" href="#">Start Game</a> |
+        <a id="shopBtn" href="#">Shop</a>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
